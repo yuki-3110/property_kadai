@@ -6,23 +6,27 @@ class PropertiesController < ApplicationController
     @properties = Property.all
   end
 
-  # GET /properties/1 or /properties/1.json
-  def show
-  end
-
   # GET /properties/new
   def new
     @property = Property.new
-    @property.nearest_stations.build
+    2.times { @property.nearest_stations.build }
   end
+
+  # GET /properties/1 or /properties/1.json
+  def show
+    # @properties = NearestStation.all
+    @nearest_stations = @property.nearest_stations
+  end
+
+  
 
   # GET /properties/1/edit
   def edit
+    @property.nearest_stations.build
   end
 
   # POST /properties or /properties.json
   def create
-
     @property = Property.new(property_params)
 
     respond_to do |format|
@@ -67,6 +71,6 @@ class PropertiesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def property_params
       params.require(:property).permit(:name, :rent, :address, :age, :remarks, 
-      nearest_station_attributes:[:line_name, :station_name, :walk_time, :property_id])
+      nearest_stations_attributes: [:line_name, :station_name, :walk_time, :property_id, :id, :_destroy])
     end
 end
